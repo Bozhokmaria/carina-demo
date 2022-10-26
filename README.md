@@ -25,3 +25,6 @@ mvn clean eclipse:eclipse
 mvn clean test -Dsuite=api
 ```
 
+## To run tests in docker use the same version for selenium as in project dependencies
+docker run -d -p 4444:4444 --shm-size="2g" selenium/standalone-chrome:4.4.0
+compatible for current dependency version
