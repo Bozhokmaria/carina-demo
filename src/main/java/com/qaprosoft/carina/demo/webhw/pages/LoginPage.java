@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends AbstractPage {
 
-    @FindBy(xpath = "//*[@id=\"login_button_container\"]/div")
+    @FindBy(id = "login_button_container")
     private LoginBox loginBox;
 
     public LoginPage(WebDriver driver) {

@@ -7,44 +7,47 @@ import org.openqa.selenium.support.FindBy;
 
 public class ProductPage extends AbstractPage {
 
-    @FindBy(xpath ="//*[@id=\"inventory_item_container\"]/div/div/div[2]/div[1]")
+    @FindBy(xpath = "//div[contains(@class, 'inventory_details_name')]")
+//    @FindBy(className = "inventory_item_name")
     private ExtendedWebElement inventoryItemName;
 
-    @FindBy(xpath ="//*[@id=\"inventory_item_container\"]/div/div/div[2]/div[3]")
+    @FindBy(className = "inventory_details_price")
     private ExtendedWebElement inventoryItemPrice;
 
-    @FindBy(xpath ="//*[@id=\"back-to-products\"]")
+    @FindBy(id = "back-to-products")
     private ExtendedWebElement backToProductsButton;
 
-    @FindBy(xpath ="//*[@id=\"react-burger-menu-btn\"]")
+    @FindBy(id ="react-burger-menu-btn")
     private ExtendedWebElement sidebar;
 
-    @FindBy(xpath ="//*[@id=\"logout_sidebar_link\"]")
+    @FindBy(id ="logout_sidebar_link")
     private ExtendedWebElement logOut;
 
     public ProductPage(WebDriver driver) {
         super(driver);
-        setPageAbsoluteURL("https://www.saucedemo.com/inventory-item.html?id=4");
+        setPageURL("/inventory-item.html?id=4");
     }
 
-    public ExtendedWebElement getInventoryItemName() {
-        return inventoryItemName;
+    public String getInventoryItemName() {
+        return inventoryItemName.getText();
     }
 
-    public ExtendedWebElement getInventoryItemPrice() {
-        return inventoryItemPrice;
+    public Double getInventoryItemPrice() {
+        return Double.valueOf(inventoryItemPrice.getText().substring(1));
     }
 
-    public void clickOnBackToProductsButton(){
-        backToProductsButton.click();;
+    public InventoryPage clickOnBackToProductsButton(){
+        backToProductsButton.click();
+        return new InventoryPage(getDriver());
     }
 
     public void clickOnSideBar(){
         backToProductsButton.click();;
     }
 
-    public void clickOnSideBarThenLogout(){
+    public LoginPage clickOnSideBarThenLogout(){
         sidebar.click();;
         logOut.click();
+        return new LoginPage(getDriver());
     }
 }

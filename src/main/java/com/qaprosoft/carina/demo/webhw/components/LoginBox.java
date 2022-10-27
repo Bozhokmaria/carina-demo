@@ -2,22 +2,23 @@ package com.qaprosoft.carina.demo.webhw.components;
 
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractUIObject;
+import com.qaprosoft.carina.demo.webhw.pages.InventoryPage;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
 public class LoginBox extends AbstractUIObject {
 
-    @FindBy(xpath = "/html/body/div/div/div[2]/div[1]/div[1]/div/form/div[1]/input")
+    @FindBy(id = "user-name")
     private ExtendedWebElement username;
 
-    @FindBy(xpath = "/html/body/div/div/div[2]/div[1]/div[1]/div/form/div[2]/input")
+    @FindBy(id = "password")
     private ExtendedWebElement password;
 
-    @FindBy(xpath = "/html/body/div/div/div[2]/div[1]/div[1]/div/form/input")
+    @FindBy(id = "login-button")
     private ExtendedWebElement submitButton;
 
-    @FindBy(xpath = "//*[@id=\"login_button_container\"]/div/form/div[3]/h3")
+    @FindBy(xpath = "//div[@class='error-message-container error']")
     private ExtendedWebElement errorMessageDiv;
 
     public LoginBox(WebDriver driver, SearchContext searchContext) {
@@ -32,23 +33,16 @@ public class LoginBox extends AbstractUIObject {
         this.password.type(password);
     }
 
-    public void clickOnSubmitButton(){
+    public InventoryPage clickOnSubmitButton(){
         submitButton.click();;
-    }
-
-    public ExtendedWebElement getUsername() {
-        return username;
-    }
-
-    public ExtendedWebElement getPassword() {
-        return password;
+        return new InventoryPage(getDriver());
     }
 
     public ExtendedWebElement getSubmitButton() {
         return submitButton;
     }
 
-    public ExtendedWebElement getErrorMessageDiv() {
-        return errorMessageDiv;
+    public String getErrorMessageDiv() {
+        return errorMessageDiv.getText();
     }
 }

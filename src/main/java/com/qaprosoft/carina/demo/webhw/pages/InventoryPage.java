@@ -5,80 +5,137 @@ import com.qaprosoft.carina.core.gui.AbstractPage;
 import com.qaprosoft.carina.demo.webhw.components.InventoryItem;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InventoryPage extends AbstractPage {
 
     @FindBy(id = "inventory_container")
     private List<InventoryItem> items;
 
-    @FindBy(xpath = "//*[@id=\"add-to-cart-sauce-labs-backpack\"]")
+    @FindBy(id = "add-to-cart-sauce-labs-backpack")
     private ExtendedWebElement addToCartButton;
 
-    @FindBy(xpath = "//*[@id=\"shopping_cart_container\"]/a")
+    @FindBy(id = "shopping_cart_container")
     private ExtendedWebElement cartButton;
 
-    @FindBy(xpath = "//*[@id=\"item_4_img_link\"]")
+    @FindBy(id = "item_4_img_link")
     private ExtendedWebElement imageLink;
 
-    @FindBy(xpath = "//*[@id=\"header_container\"]/div[2]/div[2]/span/select")
-    private ExtendedWebElement sortingButton;
+    @FindBy(className = "product_sort_container")
+    private ExtendedWebElement sorting;
 
-    @FindBy(xpath = "//*[@id=\"header_container\"]/div[2]/div[2]/span/select/option[1]")
+    @FindBy(xpath = "//*[contains(text(),'Name (A to Z)')]")
     private ExtendedWebElement fromAToZ;
 
-    @FindBy(xpath = "//*[@id=\"header_container\"]/div[2]/div[2]/span/select/option[2]")
+    @FindBy(xpath = "//*[contains(text(),'Name (Z to A)')]")
     private ExtendedWebElement fromZToA;
 
-    @FindBy(xpath = "//*[@id=\"header_container\"]/div[2]/div[2]/span/select/option[3]")
+    @FindBy(xpath = "//*[contains(text(),'Price (low to high)')]")
     private ExtendedWebElement fromLowToHigh;
 
-    @FindBy(xpath = "//*[@id=\"header_container\"]/div[2]/div[2]/span/select/option[4]")
+    @FindBy(xpath = "//*[contains(text(),'Price (high to low)')]")
     private ExtendedWebElement fromHighToLow;
 
     public InventoryPage(WebDriver driver) {
         super(driver);
-        setPageAbsoluteURL("https://www.saucedemo.com/inventory.html");
+        setPageURL("/inventory.html");
     }
 
-    public void clickOnAddToCartButton(){
-        addToCartButton.click();;
+    public void clickOnAddToCartButton() {
+        addToCartButton.click();
     }
 
-    public void clickOnCartButton(){
-        cartButton.click();;
+    public CartPage clickOnCartButton() {
+        cartButton.click();
+        return new CartPage(getDriver());
     }
 
-    public void clickOnImageLink(){
-        imageLink.click();;
+    public ProductPage clickOnImageLink() {
+        imageLink.click();
+        return new ProductPage(getDriver());
     }
 
     public List<InventoryItem> getItems() {
         return items;
     }
 
-    public void clickOnSortButton(){
-        sortingButton.click();;
+    public void clickOnSortButton() {
+        sorting.click();
     }
 
-    public void clickOnOptionFromAtoZ(){
+    public void clickOnOptionFromAtoZ() {
         clickOnSortButton();
-        fromAToZ.click();;
+        fromAToZ.click();
     }
 
-    public void clickOnOptionFromZtoA(){
+
+    public void clickOnOptionFromZtoA() {
         clickOnSortButton();
-        fromZToA.click();;
+        fromZToA.click();
     }
 
-    public void clickOnOptionFromLowtoHigh(){
+    public void clickOnOptionFromLowToHigh() {
         clickOnSortButton();
-        fromLowToHigh.click();;
+        fromLowToHigh.click();
     }
 
-    public void clickOnOptionFromHighToLow(){
+    public void clickOnOptionFromHighToLow() {
         clickOnSortButton();
-        fromHighToLow.click();;
+        fromHighToLow.click();
+    }
+
+    public List<Double> getPrices(List<InventoryItem> itemList) {
+        List<Double> prices = new ArrayList<>();
+        for (int i = 0; i < itemList.size(); i++) {
+            prices.add(itemList.get(i).getItemPrice());
+        }
+        return prices;
+    }
+
+    public List<String> getNames() {
+        List<String> prices = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            prices.add(items.get(i).getItemName());
+        }
+        return prices;
+    }
+
+    public List<InventoryItem> sortedBy(String sort) {
+        List<InventoryItem> sorted = new ArrayList<>(items);
+
+        switch (sort) {
+            case ("az"): {
+                sorted = sorted.stream()
+                        .sorted(Comparator.comparing(InventoryItem::getItemName))
+                        .collect(Collectors.toList());
+                break;
+            }
+            case ("za"): {
+                sorted = sorted.stream()
+                        .sorted(Comparator.comparing(InventoryItem::getItemName).reversed())
+                        .collect(Collectors.toList());
+                break;
+            }
+            case ("lohi"): {
+                sorted = sorted.stream()
+                        .sorted(Comparator.comparingDouble(InventoryItem::getItemPrice))
+                        .collect(Collectors.toList());
+                break;
+            }
+            case ("hilo"): {
+                sorted = sorted.stream()
+                        .sorted(Comparator.comparingDouble(InventoryItem::getItemPrice).reversed())
+                        .collect(Collectors.toList());
+                break;
+            }
+            default:
+                Assert.fail("Wrong sort name");
+        }
+        return sorted;
     }
 }

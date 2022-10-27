@@ -8,21 +8,21 @@ import org.openqa.selenium.support.FindBy;
 public class CartPage extends AbstractPage {
 
 
-    @FindBy(xpath ="//*[@id=\"item_4_title_link\"]/div")
+    @FindBy(className ="inventory_item_name")
     private ExtendedWebElement inventoryItemName;
 
-    @FindBy(xpath ="//*[@id=\"cart_contents_container\"]/div/div[1]/div[3]/div[2]/div[2]/div")
+    @FindBy(className ="inventory_item_price")
     private ExtendedWebElement inventoryItemPrice;
     public CartPage(WebDriver driver) {
         super(driver);
-        setPageAbsoluteURL("https://www.saucedemo.com/cart.html");
+        setPageURL("/cart.html");
     }
 
-    public ExtendedWebElement getInventoryItemName() {
-        return inventoryItemName;
+    public String getInventoryItemName() {
+        return inventoryItemName.getText();
     }
 
-    public ExtendedWebElement getInventoryItemPrice() {
-        return inventoryItemPrice;
+    public Double getInventoryItemPrice() {
+        return Double.valueOf(inventoryItemPrice.getText().substring(1));
     }
 }
