@@ -27,8 +27,8 @@ public class WebTestPage implements IAbstractTest {
     public void testClickSubmitButtonWithNoDataProvided() {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.open();
-        loginPage.getLoginBox().clickOnSubmitButton();
-        Assert.assertEquals(loginPage.getLoginBox().getErrorMessageDiv(), "Epic sadface: Username is required", "Text not matching");
+        loginPage.clickOnSubmitButton();
+        Assert.assertEquals(loginPage.getErrorMessageDiv(), "Epic sadface: Username is required", "Text not matching");
     }
 
     @Test
@@ -36,10 +36,10 @@ public class WebTestPage implements IAbstractTest {
     public void testClickSubmitButtonWithInvalidDataProvided() {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.open();
-        loginPage.getLoginBox().typeUserName("standard_user");
-        loginPage.getLoginBox().typePassword("standard_user");
-        loginPage.getLoginBox().clickOnSubmitButton();
-        Assert.assertEquals(loginPage.getLoginBox().getErrorMessageDiv(), "Epic sadface: Username and password do not match any user in this service","Text not matching");
+        loginPage.typeUserName("standard_user");
+        loginPage.typePassword("standard_user");
+        loginPage.clickOnSubmitButton();
+        Assert.assertEquals(loginPage.getErrorMessageDiv(), "Epic sadface: Username and password do not match any user in this service","Text not matching");
     }
 
     @Test
@@ -47,10 +47,10 @@ public class WebTestPage implements IAbstractTest {
     public void testAddToCart() {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.open();
-        loginPage.getLoginBox().typeUserName("standard_user");
-        loginPage.getLoginBox().typePassword("secret_sauce");
+        loginPage.typeUserName("standard_user");
+        loginPage.typePassword("secret_sauce");
 
-        InventoryPage inventoryPage = loginPage.getLoginBox().clickOnSubmitButton();
+        InventoryPage inventoryPage = loginPage.clickOnSubmitButton();
         Assert.assertTrue(inventoryPage.isPageOpened(), "Inventory page is not opened");
         inventoryPage.clickOnAddToCartButton();
 
@@ -65,9 +65,9 @@ public class WebTestPage implements IAbstractTest {
     public void testOpenProductPageGoBackAndLogOut() {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.open();
-        loginPage.getLoginBox().typeUserName("standard_user");
-        loginPage.getLoginBox().typePassword("secret_sauce");
-        InventoryPage inventoryPage = loginPage.getLoginBox().clickOnSubmitButton();
+        loginPage.typeUserName("standard_user");
+        loginPage.typePassword("secret_sauce");
+        InventoryPage inventoryPage = loginPage.clickOnSubmitButton();
         Assert.assertTrue(inventoryPage.isPageOpened(), "Inventory page is not opened");
 
         ProductPage productPage = inventoryPage.clickOnImageLink();
@@ -86,9 +86,9 @@ public class WebTestPage implements IAbstractTest {
     public void testSorting() {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.open();
-        loginPage.getLoginBox().typeUserName("standard_user");
-        loginPage.getLoginBox().typePassword("secret_sauce");
-        InventoryPage inventoryPage = loginPage.getLoginBox().clickOnSubmitButton();
+        loginPage.typeUserName("standard_user");
+        loginPage.typePassword("secret_sauce");
+        InventoryPage inventoryPage = loginPage.clickOnSubmitButton();
         Assert.assertTrue(inventoryPage.isPageOpened(), "Inventory page is not opened");
 
         //Default A-Z sorting
